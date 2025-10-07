@@ -94,13 +94,13 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
     const { commandName } = interaction;
     if (!client.commands.has(commandName)) return;
+    // Helper to reply only if not already replied or deferred
+    const safeReply = async (msg, ephemeral = false) => {
+        if (!interaction.replied && !interaction.deferred) {
+            await interaction.reply({ content: msg, flags: ephemeral ? 64 : undefined });
+        }
+    };
     try {
-        // Helper to reply only if not already replied or deferred
-        const safeReply = async (msg, ephemeral = false) => {
-            if (!interaction.replied && !interaction.deferred) {
-                await interaction.reply({ content: msg, flags: ephemeral ? 64 : undefined });
-            }
-        };
         if (commandName === 'kick' || commandName === 'ban' || commandName === 'mute' || commandName === 'warn') {
             const user = interaction.options.getUser('user');
             const member = await interaction.guild.members.fetch(user.id);
@@ -111,16 +111,16 @@ client.on('interactionCreate', async interaction => {
                 guild: interaction.guild,
                 channel: interaction.channel,
                 author: interaction.user,
-                reply: (msg) => safeReply(msg, true),
+                reply: (msg, ephemeral = false) => safeReply(msg, ephemeral),
                 content: '',
             }, ['', user, reason]);
-            await safeReply(`${user.tag} ${commandName}ed.`, true);
+            // No extra reply here to avoid double reply error
         } else if (commandName === 'purge') {
             const amount = interaction.options.getInteger('amount');
             await client.commands.get('purge').execute({
                 member: interaction.member,
                 channel: interaction.channel,
-                reply: (msg) => safeReply(msg, true),
+                reply: (msg, ephemeral = false) => safeReply(msg, ephemeral),
                 content: '',
             }, ['', amount]);
             await safeReply(`Purged ${amount} messages.`, true);
