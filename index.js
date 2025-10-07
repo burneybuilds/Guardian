@@ -1,5 +1,5 @@
 require('dotenv').config();
-const antiRaid = require('./Modration/Auto_mod/anti-raid.js');
+const antiRaid = require('./Auto_mod/anti-raid.js');
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Collection } = require('discord.js');
 const path = require('path');
 const kickCommand = require('./Modration/Commands/Kick.js');
@@ -36,7 +36,7 @@ const commands = [
 
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
-const autoMod = require('./Modration/Auto_mod/auto_mod.js');
+const autoMod = require('./Auto_mod/auto_mod.js');
 require('dotenv').config(); 
 
 
