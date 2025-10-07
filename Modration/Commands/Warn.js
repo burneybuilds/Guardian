@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Warn a member in the server',
 	async execute(message, args) {
 		if (!message.member.permissions.has('KickMembers')) {
-			return message.reply('You do not have permission to use this command.');
+			return message.reply('You do not have permission to use this command.', false);
 		}
 		const member = message.mentions.members.first();
 		if (!member) {

@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Delete a number of messages from a channel',
 	async execute(message, args) {
 		if (!message.member.permissions.has('ManageMessages')) {
-			return message.reply('You do not have permission to use this command.');
+			return message.reply('You do not have permission to use this command.', false);
 		}
 		const amount = parseInt(args[1]);
 		if (isNaN(amount) || amount < 1 || amount > 100) {
@@ -14,7 +14,7 @@ module.exports = {
 			message.channel.send(`Deleted ${amount} messages.`)
 				.then(msg => setTimeout(() => msg.delete(), 5000));
 		} catch (error) {
-			message.reply('There was an error trying to purge messages.');
+			message.reply('There was an error trying to purge messages.', false);
 		}
 	}
 };
